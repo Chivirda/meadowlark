@@ -4,17 +4,28 @@ const expressHandlebars = require('express-handlebars')
 const app = express()
 const port = process.env.port || 3000
 
+const fortunes = [
+  'Победи свои страхи или они победят тебя',
+  'Рекам нужны истоки',
+  'Не бойся неведомого',
+  'Тебя ждёт приятный сюрприз',
+  'Будь проще везде, где только можно'
+]
+
 app.engine('handlebars', expressHandlebars.engine({
   defaultLayout: 'main'
 }))
 app.set('view engine', 'handlebars')
+
+app.use(express.static(__dirname + '/public'))
 
 app.get('/', (req, res) => {
   res.render('home')
 })
 
 app.get('/about', (req, res) => {
-  res.render('about')
+  const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)]
+  res.render('about', { fortune: randomFortune })
 })
 
 app.use((req, res) => {
